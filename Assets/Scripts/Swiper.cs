@@ -21,7 +21,7 @@ public class Swiper : MonoBehaviour
         }
         if (!_isSwiping)
             return;
-        if(Mathf.Abs(Input.mousePosition.x - _firstTouch.x) > _screenWidth / 4f)
+        if(Mathf.Abs(Input.mousePosition.x - _firstTouch.x) > _screenWidth / 8f)
         {
             _isSwiping = false;
             EventsPool.UserSwipedEvent.Invoke(Input.mousePosition.x > _firstTouch.x ? AttackDirection.Right : AttackDirection.Left);
