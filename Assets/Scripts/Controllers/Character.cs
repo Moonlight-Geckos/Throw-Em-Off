@@ -82,7 +82,7 @@ public class Character : MonoBehaviour
     }
     private void RegisterAttack(AttackDirection dir)
     {
-        if(_idle || dir != _atkDir)
+        if(_idle || _animating)
             _nextAttacksQueue.Enqueue(dir);
     }
 }
