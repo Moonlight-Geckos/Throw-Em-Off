@@ -7,27 +7,34 @@ public class Character : MonoBehaviour
     [SerializeField]
     private int numOfAnimations = 4;
 
+    [SerializeField]
+    private GameObject _hitboxCollider;
+
     private Animator _animator;
     private int _animationIndex = 0;
-    private List<int> _randomAnimations;
     private bool _animating;
     private bool _idle;
 
+    private bool _right;
+    private float _duration;
 
+    private List<string> _randomAnimations;
     private Queue<AttackDirection> _nextAttacksQueue;
     private AttackDirection _atkDir;
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>();
+
         _atkDir = AttackDirection.None;
-        _randomAnimations = new List<int>();
+        _randomAnimations = new List<string>();
         _nextAttacksQueue = new Queue<AttackDirection>();
         _animating = false;
         _idle = false;
+        _hitboxCollider.SetActive(false);
 
         for (int i = 1; i <= numOfAnimations; i++)
         {
-            _randomAnimations.Add(i);
+            _randomAnimations.Add(i.ToString());
         }
         _randomAnimations.Sort((a, b) => 1 - 2 * Random.Range(0, _randomAnimations.Count));
 
@@ -58,31 +65,33 @@ public class Character : MonoBehaviour
             _randomAnimations.Sort((a, b) => 1 - 2 * Random.Range(0, _randomAnimations.Count));
             _animationIndex = 0;
         }
-        _animator.CrossFade(_randomAnimations[_animationIndex].ToString(), 0.2f);
+        _animator.CrossFade(_randomAnimations[_animationIndex], 0.2f);
         IEnumerator s()
         {
             yield return null;
-            float duration = 0.1f;
-            bool right = dir == AttackDirection.Right;
-            if ((dir == AttackDirection.Right && transform.localEulerAngles.y > 100)
-                || (dir == AttackDirection.Left && transform.localEulerAngles.y > 0))
+            _duration = 0.1f;
+            _right = dir == AttackDirection.Right;
+            if ((dir == AttackDirection.Left && transform.localEulerAngles.y > 100)
+                || (dir == AttackDirection.Right && transform.localEulerAngles.y > 0))
             {
-                while (duration > 0)
+                while (_duration > 0)
                 {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, 90 * (right ? 1 : -1), 0), Time.deltaTime / duration);
-                    duration -= Time.deltaTime;
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, 90 * (_right ? -1 : 1), 0), Time.deltaTime / _duration);
+                    _duration -= Time.deltaTime;
                     yield return new WaitForEndOfFrame();
                 }
             }
-            duration = 0.1f;
-            yield return new WaitForSeconds(duration);
+            _duration = 0.15f;
+            _hitboxCollider.SetActive(true);
+            yield return new WaitForSeconds(_duration);
+            _hitboxCollider.SetActive(false);
             _animating = false;
         }
         StartCoroutine(s());
     }
     private void RegisterAttack(AttackDirection dir)
     {
-        if(_idle || _animating)
+        if((_idle || _animating ) && _nextAttacksQueue.Count < 3)
             _nextAttacksQueue.Enqueue(dir);
     }
 }
