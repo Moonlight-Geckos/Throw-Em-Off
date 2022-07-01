@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 66358cdabd85fea4cbf44e47e5dd73a6
+guid: 9574fbf0fe33c8b4ba58d9a457067e03
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable:
@@ -10,23 +10,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Black.001
-    second: {fileID: 2100000, guid: ff885d16885abfa418f81e157511f5c5, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: LightGreen.001
-    second: {fileID: 2100000, guid: ff885d16885abfa418f81e157511f5c5, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: LightWhite.001
-    second: {fileID: 2100000, guid: ff885d16885abfa418f81e157511f5c5, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: White.001
+      name: Black
     second: {fileID: 2100000, guid: f11b77ab3ddb2f149ae9b39ba296ba33, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert38
+    second: {fileID: 2100000, guid: 7f2359e26e1ecac4ebd612a3fedef611, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert39
+    second: {fileID: 2100000, guid: 7f2359e26e1ecac4ebd612a3fedef611, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert39.001
+    second: {fileID: 2100000, guid: 7f2359e26e1ecac4ebd612a3fedef611, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -116,11 +116,12 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 66358cdabd85fea4cbf44e47e5dd73a6,
+    type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   additionalBone: 0
   userData: 

@@ -22,6 +22,7 @@ public class Spawner : MonoBehaviour
 
     private Timer _spawnTimer;
     private bool _right;
+    private Observer _observer;
     private void Awake()
     {
         _spawnTimer = TimersPool.Pool.Get();
@@ -32,9 +33,13 @@ public class Spawner : MonoBehaviour
     }
     private void Spawn()
     {
+        if(_observer == null)
+        {
+            _observer = Observer.Instance;
+        }
         var t = enemiesPool.Pool.Get();
         _right = (int)Time.timeSinceLevelLoad*11 % 2 == 0;
-        t.transform.position = transform.position + (Vector3.right * (_right ? 1 : -1) * spawnPositionOffset);
+        t.transform.position =  transform.position + (Vector3.right * (_right ? 1 : -1) * spawnPositionOffset * UnityEngine.Random.Range(0.87f,1.15f));
         t.Initialize(new Vector3(0, -5, 0));
         _spawnTimer.Duration =
             UnityEngine.Random.Range(spawnCooldown.minCooldown, spawnCooldown.maxCooldown);

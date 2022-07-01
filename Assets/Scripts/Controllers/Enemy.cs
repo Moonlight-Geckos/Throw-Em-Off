@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField]
+    private ParticlesPool explosionParticlesPool;
 
     [SerializeField]
     private Rigidbody bodyRigidbody;
@@ -10,10 +12,10 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private BoxCollider outisdeBoxCollider;
 
-
-
     private bool _landed;
     private bool _killed;
+    private IDisposable _disposable;
+    private Observer _observer;
     private Animator _animator;
     private Collider[] _allBodyColliders;
     private Rigidbody[] _allBodyRigidbodies;
@@ -26,8 +28,11 @@ public class Enemy : MonoBehaviour
         _movementRigidbody = GetComponent<Rigidbody>();
         _allBodyColliders = GetComponentsInChildren<Collider>();
         _allBodyRigidbodies = GetComponentsInChildren<Rigidbody>();
+
+
         _stopPhysicsTimer = TimersPool.Pool.Get();
         _stopPhysicsTimer.Duration = 8f;
+        _observer = Observer.Instance;
         _stopPhysicsTimer.AddTimerFinishedEventListener(StopPhysics);
     }
     private void OnCollisionEnter(Collision collision)
@@ -40,8 +45,8 @@ public class Enemy : MonoBehaviour
     {
         if (_killed)
             return;
-        if (other.gameObject.layer == StaticValues.DestinationLayer)    Explode();
-        else if (other.gameObject.layer == StaticValues.CharacterLayer)   Kill();
+        if (other.gameObject.layer == StaticValues.DestinationLayer) Explode();
+        else if (Observer.PlayerIsHitting && other.gameObject.layer == StaticValues.CharacterLayer) Kill();
     }
     private void StopPhysics()
     {
@@ -49,6 +54,7 @@ public class Enemy : MonoBehaviour
         {
             rb.isKinematic = true;
         }
+        TimersPool.Pool.Release(_stopPhysicsTimer);
     }
     private void Land()
     {
@@ -60,18 +66,22 @@ public class Enemy : MonoBehaviour
             float duration = _animator.GetCurrentAnimatorClipInfo(0).Length / 2f;
             yield return new WaitForSeconds(duration);
             transform.LookAt(new Vector3(0, transform.position.y, 0));
-            _movementRigidbody.velocity = transform.forward * Random.Range(20f, 25f);
+            _movementRigidbody.velocity = transform.forward * Random.Range(22f, 25f);
         }
         StartCoroutine(land());
     }
     private void Explode()
     {
-        bodyRigidbody.velocity = Vector3.zero;
+        explosionParticlesPool.Pool.Get().transform.position = transform.position;
+        if(_disposable == null)
+            _disposable = GetComponent<IDisposable>();
+        _disposable.Dispose();
     }
-    private void Kill()
+    public void Kill()
     {
         _killed = true;
         _animator.enabled = false;
+        Observer.PlayerIsHitting = false;
         _stopPhysicsTimer.Run();
         foreach (var collider in _allBodyColliders)
         {
@@ -86,6 +96,8 @@ public class Enemy : MonoBehaviour
     public void Initialize(Vector3 velocity)
     {
         _movementRigidbody.velocity = velocity;
+        transform.rotation = Random.rotation;
+        transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
 
         _landed = false;
         _killed = false;

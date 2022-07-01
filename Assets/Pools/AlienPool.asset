@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d5d203cfa5b59bf459821340b920b08e, type: 3}
-  m_Name: Enemy
+  m_Name: AlienPool
   m_EditorClassIdentifier: 
-  prefab: {fileID: 7915136849279582684, guid: 358b0d5c62c4d824ab9278648d44277a, type: 3}
+  prefab: {fileID: 6581334743921527709, guid: 358b0d5c62c4d824ab9278648d44277a, type: 3}
   maxPoolSize: 100

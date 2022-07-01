@@ -1,18 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ParticleSystem))]
 public class ParticleSystemController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        
+        var system = GetComponent<ParticleSystem>().main;
+        system.stopAction = ParticleSystemStopAction.Callback;
     }
-
-    // Update is called once per frame
-    void Update()
+    void OnParticleSystemStopped()
     {
-        
+        if(gameObject.activeSelf)
+            GetComponent<IDisposable>()?.Dispose();
     }
 }

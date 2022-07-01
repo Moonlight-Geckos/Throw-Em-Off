@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Character : MonoBehaviour
 {
     [SerializeField]
     private int numOfAnimations = 4;
-
-    [SerializeField]
-    private GameObject _hitboxCollider;
 
     private Animator _animator;
     private int _animationIndex = 0;
@@ -19,18 +17,17 @@ public class Character : MonoBehaviour
     private float _duration;
 
     private List<string> _randomAnimations;
+    private UnityEvent _attackEvent;
     private Queue<AttackDirection> _nextAttacksQueue;
     private AttackDirection _atkDir;
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
-
         _atkDir = AttackDirection.None;
         _randomAnimations = new List<string>();
         _nextAttacksQueue = new Queue<AttackDirection>();
         _animating = false;
         _idle = false;
-        _hitboxCollider.SetActive(false);
 
         for (int i = 1; i <= numOfAnimations; i++)
         {
@@ -60,6 +57,8 @@ public class Character : MonoBehaviour
         _animationIndex++;
         _atkDir = dir;
         _animating = true;
+
+        Observer.PlayerIsHitting = true ;
         if (_animationIndex >= _randomAnimations.Count)
         {
             _randomAnimations.Sort((a, b) => 1 - 2 * Random.Range(0, _randomAnimations.Count));
@@ -81,11 +80,10 @@ public class Character : MonoBehaviour
                     yield return new WaitForEndOfFrame();
                 }
             }
-            _duration = 0.15f;
-            _hitboxCollider.SetActive(true);
+            _duration = 0.13f;
             yield return new WaitForSeconds(_duration);
-            _hitboxCollider.SetActive(false);
             _animating = false;
+            Observer.PlayerIsHitting = false;
         }
         StartCoroutine(s());
     }
