@@ -8,6 +8,9 @@ public class Character : MonoBehaviour
     [SerializeField]
     private int numOfAnimations = 4;
 
+    [SerializeField]
+    private float attackDuration = 0.35f;
+
     private Animator _animator;
     private int _animationIndex = 0;
     private bool _animating;
@@ -15,18 +18,21 @@ public class Character : MonoBehaviour
 
     private bool _right;
     private float _duration;
+    private bool _canSwipe;
 
+    private Timer _attackTimer;
     private List<string> _randomAnimations;
-    private UnityEvent _attackEvent;
     private Queue<AttackDirection> _nextAttacksQueue;
-    private AttackDirection _atkDir;
     private void Awake()
     {
+        _attackTimer = TimersPool.Pool.Get();
+        _attackTimer.Duration = attackDuration;
+        _attackTimer.AddTimerFinishedEventListener(FinishedAnimating);
         _animator = GetComponentInChildren<Animator>();
-        _atkDir = AttackDirection.None;
         _randomAnimations = new List<string>();
         _nextAttacksQueue = new Queue<AttackDirection>();
         _animating = false;
+        _canSwipe = true;
         _idle = false;
 
         for (int i = 1; i <= numOfAnimations; i++)
@@ -39,32 +45,34 @@ public class Character : MonoBehaviour
     }
     private void Update()
     {
+        if (_animating && !_canSwipe && _attackTimer.Running && _attackTimer.Duration - _attackTimer.ElapsedSeconds <= 0.15f)
+            _canSwipe = true;
         if(_nextAttacksQueue.Count > 0)
         {
             if (_animating)
                 return;
             _idle = false;
             AttackWithAnimation(_nextAttacksQueue.Dequeue());
+            _attackTimer.Run();
         }
         else if(!_animating && !_idle)
         {
             _idle = true;
-            _animator.CrossFade("Idle", 0.2f);
+            _animator.CrossFade("Idle", 0.12f);
         }
     }
     private void AttackWithAnimation(AttackDirection dir)
     {
         _animationIndex++;
-        _atkDir = dir;
         _animating = true;
-
+        _canSwipe = false;
         Observer.PlayerIsHitting = true ;
         if (_animationIndex >= _randomAnimations.Count)
         {
             _randomAnimations.Sort((a, b) => 1 - 2 * Random.Range(0, _randomAnimations.Count));
             _animationIndex = 0;
         }
-        _animator.CrossFade(_randomAnimations[_animationIndex], 0.2f);
+        _animator.CrossFade(_randomAnimations[_animationIndex], 0.12f);
         IEnumerator s()
         {
             yield return null;
@@ -80,16 +88,17 @@ public class Character : MonoBehaviour
                     yield return new WaitForEndOfFrame();
                 }
             }
-            _duration = 0.13f;
-            yield return new WaitForSeconds(_duration);
-            _animating = false;
-            Observer.PlayerIsHitting = false;
         }
         StartCoroutine(s());
     }
     private void RegisterAttack(AttackDirection dir)
     {
-        if((_idle || _animating ) && _nextAttacksQueue.Count < 3)
+        if(_canSwipe && _nextAttacksQueue.Count < 3)
             _nextAttacksQueue.Enqueue(dir);
+    }
+    private void FinishedAnimating()
+    {
+        _animating = false;
+        Observer.PlayerIsHitting = false;
     }
 }

@@ -33,6 +33,10 @@ public class Timer
 			}
 		}
 	}
+	public float ElapsedSeconds
+	{
+		get { return elapsedSeconds; }
+	}
 
 	public bool Running
     {
