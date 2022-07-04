@@ -78,6 +78,7 @@ public class Enemy : MonoBehaviour
     }
     private void Explode()
     {
+        EventsPool.CharacterDamagedEvent.Invoke(1);
         explosionParticlesPool.Pool.Get().transform.position = transform.position;
         if(_disposable == null)
             _disposable = GetComponent<IDisposable>();
@@ -87,8 +88,7 @@ public class Enemy : MonoBehaviour
     {
         _killed = true;
         _animator.enabled = false;
-        Observer.PlayerIsHitting = false;
-        _stopPhysicsTimer.Run();
+        EventsPool.FinishedHitEvent.Invoke(true);
         foreach (var collider in _allBodyColliders)
         {
             collider.enabled = true;
@@ -98,6 +98,7 @@ public class Enemy : MonoBehaviour
         bodyRigidbody.velocity = (-transform.forward * 140f) + Vector3.up * 65f;
         bodyRigidbody.angularVelocity = Vector3.right * Random.Range(-2f, 2f);
         outisdeBoxCollider.enabled = false;
+        _stopPhysicsTimer.Run();
     }
     public void Initialize(Vector3 velocity)
     {

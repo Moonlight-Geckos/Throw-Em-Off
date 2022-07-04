@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class Character : MonoBehaviour
+public class Character : MonoBehaviour, IDamagable
 {
+    [SerializeField]
+    private int maxHealth = 10;
+
     [SerializeField]
     private int numOfAnimations = 4;
 
@@ -17,8 +19,9 @@ public class Character : MonoBehaviour
     private bool _idle;
 
     private bool _right;
-    private float _duration;
     private bool _canSwipe;
+    private float _duration;
+    private float _health;
 
     private Timer _attackTimer;
     private List<string> _randomAnimations;
@@ -31,6 +34,7 @@ public class Character : MonoBehaviour
         _animator = GetComponentInChildren<Animator>();
         _randomAnimations = new List<string>();
         _nextAttacksQueue = new Queue<AttackDirection>();
+        _health = maxHealth;
         _animating = false;
         _canSwipe = true;
         _idle = false;
@@ -41,6 +45,7 @@ public class Character : MonoBehaviour
         }
         _randomAnimations.Sort((a, b) => 1 - 2 * Random.Range(0, _randomAnimations.Count));
 
+        EventsPool.CharacterDamagedEvent.AddListener(GetDamage);
         EventsPool.UserSwipedEvent.AddListener(RegisterAttack);
     }
     private void Update()
@@ -66,7 +71,7 @@ public class Character : MonoBehaviour
         _animationIndex++;
         _animating = true;
         _canSwipe = false;
-        Observer.PlayerIsHitting = true ;
+        EventsPool.CharacterAttackedEvent.Invoke();
         if (_animationIndex >= _randomAnimations.Count)
         {
             _randomAnimations.Sort((a, b) => 1 - 2 * Random.Range(0, _randomAnimations.Count));
@@ -99,6 +104,19 @@ public class Character : MonoBehaviour
     private void FinishedAnimating()
     {
         _animating = false;
-        Observer.PlayerIsHitting = false;
+    }
+    private void Die()
+    {
+
+    }
+    public void GetDamage(int damage)
+    {
+        if (_health <= 0)
+            return;
+        _health -= damage;
+        if(_health <= 0)
+        {
+            Die();
+        }
     }
 }
