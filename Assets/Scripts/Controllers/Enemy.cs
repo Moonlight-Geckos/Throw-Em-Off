@@ -19,6 +19,7 @@ public class Enemy : MonoBehaviour
     private Animator _animator;
     private Collider[] _allBodyColliders;
     private Rigidbody[] _allBodyRigidbodies;
+    private CharacterJoint[] _allJoints;
     private Rigidbody _movementRigidbody;
     private Timer _stopPhysicsTimer;
 
@@ -28,6 +29,7 @@ public class Enemy : MonoBehaviour
         _movementRigidbody = GetComponent<Rigidbody>();
         _allBodyColliders = GetComponentsInChildren<Collider>();
         _allBodyRigidbodies = GetComponentsInChildren<Rigidbody>();
+        _allJoints = GetComponentsInChildren<CharacterJoint>();
 
 
         _stopPhysicsTimer = TimersPool.Pool.Get();
@@ -50,9 +52,13 @@ public class Enemy : MonoBehaviour
     }
     private void StopPhysics()
     {
-        foreach(var rb in _allBodyRigidbodies)
+        foreach (var jo in _allJoints)
         {
-            rb.isKinematic = true;
+            Destroy(jo);
+        }
+        foreach (var rb in _allBodyRigidbodies)
+        {
+            Destroy(rb);
         }
         TimersPool.Pool.Release(_stopPhysicsTimer);
     }
