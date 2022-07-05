@@ -23,6 +23,9 @@ public class Enemy : MonoBehaviour
     private Rigidbody _movementRigidbody;
     private Timer _stopPhysicsTimer;
 
+    private Transform[] _allTransforms;
+    private Quaternion[] _allRotations;
+
     private void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -30,7 +33,13 @@ public class Enemy : MonoBehaviour
         _allBodyColliders = GetComponentsInChildren<Collider>();
         _allBodyRigidbodies = GetComponentsInChildren<Rigidbody>();
         _allJoints = GetComponentsInChildren<CharacterJoint>();
-
+        _allTransforms = GetComponentsInChildren<Transform>();
+        _allRotations = new Quaternion[_allTransforms.Length];
+        for (int i = 0;i < _allTransforms.Length; i++)
+        {
+            if (_allTransforms[i].gameObject.tag == "Bone")
+                _allRotations[i] = _allTransforms[i].localRotation;
+        }
 
         _stopPhysicsTimer = TimersPool.Pool.Get();
         _stopPhysicsTimer.Duration = 8f;
@@ -117,6 +126,11 @@ public class Enemy : MonoBehaviour
         foreach (var rb in _allBodyRigidbodies)
         {
             rb.isKinematic = false;
+        }
+        for (int i = 0; i < _allTransforms.Length; i++)
+        {
+            if (_allTransforms[i].gameObject.tag == "Bone")
+                _allTransforms[i].localRotation = _allRotations[i] ;
         }
 
         outisdeBoxCollider.enabled = true;

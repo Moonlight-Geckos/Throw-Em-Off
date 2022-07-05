@@ -755,8 +755,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPositionOffset: 15
   spawnCooldown:
-    minCooldown: 0.6
-    maxCooldown: 0.75
+    minCooldown: 2
+    maxCooldown: 2
   enemiesPool: {fileID: 11400000, guid: c7b2627e9ae3da241a9941d41ae984dd, type: 2}
 --- !u!1 &963194225
 GameObject:
@@ -1175,12 +1175,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &1661979941 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5349714648977482003, guid: 6160f6d7c4944b34ea70cdd4c5c57cc0,
-    type: 3}
-  m_PrefabInstance: {fileID: 8620046316296820978}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1737486461
 GameObject:
   m_ObjectHideFlags: 0
@@ -1502,19 +1496,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8620046316296820978}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &8543158782858307791
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1661979941}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 5, y: 16.14842, z: 3.8544283}
-  m_Center: {x: -0.0036491153, y: 8.070752, z: 0.02821511}
 --- !u!1001 &8620046316296820978
 PrefabInstance:
   m_ObjectHideFlags: 0
