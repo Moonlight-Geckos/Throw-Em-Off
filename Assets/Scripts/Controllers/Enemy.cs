@@ -15,16 +15,12 @@ public class Enemy : MonoBehaviour
     private bool _landed;
     private bool _killed;
     private IDisposable _disposable;
-    private Observer _observer;
     private Animator _animator;
     private Collider[] _allBodyColliders;
     private Rigidbody[] _allBodyRigidbodies;
     private CharacterJoint[] _allJoints;
     private Rigidbody _movementRigidbody;
     private Timer _stopPhysicsTimer;
-
-    private Transform[] _allTransforms;
-    private Quaternion[] _allRotations;
 
     private void Awake()
     {
@@ -33,17 +29,9 @@ public class Enemy : MonoBehaviour
         _allBodyColliders = GetComponentsInChildren<Collider>();
         _allBodyRigidbodies = GetComponentsInChildren<Rigidbody>();
         _allJoints = GetComponentsInChildren<CharacterJoint>();
-        _allTransforms = GetComponentsInChildren<Transform>();
-        _allRotations = new Quaternion[_allTransforms.Length];
-        for (int i = 0;i < _allTransforms.Length; i++)
-        {
-            if (_allTransforms[i].gameObject.tag == "Bone")
-                _allRotations[i] = _allTransforms[i].localRotation;
-        }
 
         _stopPhysicsTimer = TimersPool.Pool.Get();
         _stopPhysicsTimer.Duration = 8f;
-        _observer = Observer.Instance;
         _stopPhysicsTimer.AddTimerFinishedEventListener(StopPhysics);
     }
     private void OnCollisionEnter(Collision collision)
@@ -103,6 +91,11 @@ public class Enemy : MonoBehaviour
             collider.enabled = true;
             collider.gameObject.layer = StaticValues.RagdollLayer;
         }
+        foreach (var rb in _allBodyRigidbodies)
+        {
+            rb.isKinematic = false;
+            rb.useGravity = true;
+        }
         _movementRigidbody.velocity = Vector3.up * 140f;
         bodyRigidbody.velocity = (-transform.forward * 140f) + Vector3.up * 65f;
         bodyRigidbody.angularVelocity = Vector3.right * Random.Range(-2f, 2f);
@@ -125,12 +118,8 @@ public class Enemy : MonoBehaviour
         }
         foreach (var rb in _allBodyRigidbodies)
         {
-            rb.isKinematic = false;
-        }
-        for (int i = 0; i < _allTransforms.Length; i++)
-        {
-            if (_allTransforms[i].gameObject.tag == "Bone")
-                _allTransforms[i].localRotation = _allRotations[i] ;
+            if(rb != _movementRigidbody)
+                rb.isKinematic = true;
         }
 
         outisdeBoxCollider.enabled = true;

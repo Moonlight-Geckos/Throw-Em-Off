@@ -13,14 +13,15 @@ public class ComboCustomizer : MonoBehaviour
         public float trailTime;
         [Range(0,1f)]
         public float trailWidth;
-        public GameObject particleSystem;
+        public GameObject[] particleSystems;
 
     }
     [SerializeField]
     private List<ComboStyle> comboStyles;
 
     private TrailRenderer[] _trails;
-    private GameObject _lastParticleSystem;
+    private ComboStyle _lastComboStyle;
+    private Dictionary<int, ComboStyle> _combosDictionary;
     private void Awake()
     {
         _trails = GetComponentsInChildren<TrailRenderer>();
@@ -28,33 +29,39 @@ public class ComboCustomizer : MonoBehaviour
         {
             trail.enabled = false;
         }
-        comboStyles?.Sort((x, y) => x.level.CompareTo(y.level));
+        _combosDictionary = new Dictionary<int, ComboStyle>();
+        foreach (var cs in comboStyles) _combosDictionary.Add(cs.level, cs);
 
         EventsPool.ComboLevelEvent.AddListener(ComboLevel);
     }
     private void ComboLevel(int level)
     {
-        if (level > comboStyles.Count)
-            level = comboStyles.Count;
-        foreach(var tr in _trails)
+        ComboStyle cs;
+        _combosDictionary.TryGetValue(level, out cs);
+
+        if(_lastComboStyle != null && (cs != null || level == 0))
+            foreach(var t in _lastComboStyle.particleSystems)
+                t.SetActive(false);
+
+        foreach (var tr in _trails)
         {
             if (level == 0)
             {
                 tr.enabled = false;
             }
-            else
+            else if(cs != null)
             {
                 tr.enabled = true;
-                tr.colorGradient = comboStyles[level - 1].gradient;
-                tr.time = comboStyles[level - 1].trailTime;
-                tr.widthCurve.keys[0].value = comboStyles[level - 1].trailWidth;
+                tr.colorGradient = cs.gradient;
+                tr.time = cs.trailTime;
+                tr.widthCurve.keys[0].value = cs.trailWidth;
             }
         }
-        _lastParticleSystem?.SetActive(false);
-        if (level != 0)
+        if (cs != null)
         {
-            comboStyles[level - 1].particleSystem.SetActive(true);
-            _lastParticleSystem = comboStyles[level - 1].particleSystem;
+            foreach (var t in cs.particleSystems)
+                t.SetActive(true);
+            _lastComboStyle = cs;
         }
     }
 }
