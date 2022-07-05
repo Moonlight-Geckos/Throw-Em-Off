@@ -26,6 +26,7 @@ public class Character : MonoBehaviour, IDamagable
     private Timer _attackTimer;
     private List<string> _randomAnimations;
     private Queue<AttackDirection> _nextAttacksQueue;
+    private Material _kimonoMaterial;
     private void Awake()
     {
         _attackTimer = TimersPool.Pool.Get();
@@ -45,8 +46,18 @@ public class Character : MonoBehaviour, IDamagable
         }
         _randomAnimations.Sort((a, b) => 1 - 2 * Random.Range(0, _randomAnimations.Count));
 
+        foreach(var mat in GetComponentInChildren<SkinnedMeshRenderer>().materials)
+        {
+            if (mat.name.Contains("Kimono"))
+            {
+                _kimonoMaterial = mat;
+                break;
+            }
+        }
+
         EventsPool.CharacterDamagedEvent.AddListener(GetDamage);
         EventsPool.UserSwipedEvent.AddListener(RegisterAttack);
+        EventsPool.UpdateSkinEvent.AddListener(ChangeSkin);
     }
     private void Update()
     {
@@ -107,7 +118,12 @@ public class Character : MonoBehaviour, IDamagable
     }
     private void Die()
     {
-
+        EventsPool.GameFinishedEvent.Invoke(false);
+        Destroy(this);
+    }
+    private void ChangeSkin(SkinItem skin)
+    {
+        _kimonoMaterial.color = skin.skinColor;
     }
     public void GetDamage(int damage)
     {

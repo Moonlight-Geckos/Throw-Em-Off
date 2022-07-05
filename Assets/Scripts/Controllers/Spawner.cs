@@ -31,7 +31,9 @@ public class Spawner : MonoBehaviour
         _spawnTimer.Duration =
             UnityEngine.Random.Range(spawnCooldown.minCooldown, spawnCooldown.maxCooldown);
         _spawnTimer.AddTimerFinishedEventListener(Spawn);
-        _spawnTimer.Run();
+
+        EventsPool.GameStartedEvent.AddListener(() => _spawnTimer.Run());
+        EventsPool.GameFinishedEvent.AddListener((bool t) => Destroy(gameObject));
     }
     private void Spawn()
     {

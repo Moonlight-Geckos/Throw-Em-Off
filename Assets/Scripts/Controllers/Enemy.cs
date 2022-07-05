@@ -33,6 +33,8 @@ public class Enemy : MonoBehaviour
         _stopPhysicsTimer = TimersPool.Pool.Get();
         _stopPhysicsTimer.Duration = 8f;
         _stopPhysicsTimer.AddTimerFinishedEventListener(StopPhysics);
+
+        EventsPool.GameFinishedEvent.AddListener((bool t) => Dispose());
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -77,7 +79,11 @@ public class Enemy : MonoBehaviour
     {
         EventsPool.CharacterDamagedEvent.Invoke(1);
         explosionParticlesPool.Pool.Get().transform.position = transform.position;
-        if(_disposable == null)
+        Dispose();
+    }
+    private void Dispose()
+    {
+        if (_disposable == null)
             _disposable = GetComponent<IDisposable>();
         _disposable.Dispose();
     }

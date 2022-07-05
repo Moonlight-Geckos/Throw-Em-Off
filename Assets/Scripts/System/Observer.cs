@@ -6,6 +6,7 @@ public class Observer : MonoBehaviour
 
     private static Observer _instance;
     private static Transform _playerTransform;
+    private static int _enemiesLeft;
     private static bool _playerIsHitting;
     private static int _comboCount;
     public static Observer Instance
@@ -20,6 +21,10 @@ public class Observer : MonoBehaviour
     {
         get { return _playerIsHitting; }
     }
+    public int ComboCount
+    {
+        get { return _comboCount; }
+    }
 
     private void Awake()
     {
@@ -28,6 +33,7 @@ public class Observer : MonoBehaviour
         else
         {
             _instance = this;
+            _enemiesLeft = GameManager.Instance.EnemiesToKill;
             _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
             _playerIsHitting = false;
             _comboCount = 0;
@@ -38,11 +44,18 @@ public class Observer : MonoBehaviour
             void nothitting(bool enemydied)
             {
                 _playerIsHitting = false;
-                if (enemydied)
-                    _comboCount++;
-                if(_comboCount % 10 == 0)
+                if (!enemydied)
+                    return;
+
+                _enemiesLeft--;
+                _comboCount++;
+                if (_comboCount % 10 == 0)
                 {
                     EventsPool.ComboLevelEvent.Invoke(_comboCount / 10);
+                }
+                if (_enemiesLeft == 0)
+                {
+                    EventsPool.GameFinishedEvent.Invoke(true);
                 }
             }
             void playerhit(int y)

@@ -5,6 +5,8 @@ public class GameManager : MonoBehaviour
 {
     #region Serialized
 
+    [SerializeField]
+    private int enemiesToKill = 20;
 
     #endregion
 
@@ -24,6 +26,10 @@ public class GameManager : MonoBehaviour
     {
         get { return _timeSinceStarted; }
     }
+    public int EnemiesToKill
+    {
+        get { return enemiesToKill; }
+    }
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -36,6 +42,11 @@ public class GameManager : MonoBehaviour
             _collectedGems = PlayerStorage.CoinsCollected;
             EventsPool.ClearPoolsEvent.Invoke();
         }
+    }
+    private void Start()
+    {
+        Debug.Log(DataHolder.Instance.AllSkins);
+        EventsPool.UpdateSkinEvent.Invoke(DataHolder.Instance.AllSkins[PlayerStorage.SkinSelected]);
     }
     void Update()
     {
