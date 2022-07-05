@@ -42,7 +42,7 @@ public class Spawner : MonoBehaviour
         AssignRandomPosition();
 
         var t = enemiesPool.Pool.Get();
-        t.transform.position =  transform.position + (Vector3.right * (_right ? 1 : -1) * spawnPositionOffset * UnityEngine.Random.Range(0.87f,1.15f));
+        t.transform.position =  transform.position + (Vector3.right * (_right ? 1 : -1) * spawnPositionOffset * UnityEngine.Random.Range(0.90f,1.07f));
         t.Initialize(new Vector3(0, -5, 0));
 
         _spawnTimer.Duration =
