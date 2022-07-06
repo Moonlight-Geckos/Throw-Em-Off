@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LightAlien
+  m_Name: Light
   m_Shader: {fileID: 4800000, guid: 783c1fa41c28f034c817da1b8d75b350, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
@@ -65,7 +65,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.5
+    - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
     - _Mode: 0
@@ -77,6 +77,6 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.22223084, g: 0.8962264, b: 0.12259703, a: 1}
+    - _Color: {r: 0.9716981, g: 0.58010536, b: 0.28875935, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

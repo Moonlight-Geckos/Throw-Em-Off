@@ -11499,7 +11499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a486ef857bff7b74ba98b828c6689677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemiesToKill: 18
+  enemiesToKill: 21
 --- !u!114 &1501690741
 MonoBehaviour:
   m_ObjectHideFlags: 0

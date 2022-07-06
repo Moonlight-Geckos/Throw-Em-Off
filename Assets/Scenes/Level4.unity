@@ -10678,8 +10678,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPositionOffset: 14
   spawnCooldown:
-    minCooldown: 0.9
-    maxCooldown: 1
+    minCooldown: 0.8
+    maxCooldown: 0.9
   enemiesPool: {fileID: 11400000, guid: edf9484596ecfad40b8655983d2d144f, type: 2}
 --- !u!1 &963194225
 GameObject:
@@ -11499,7 +11499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a486ef857bff7b74ba98b828c6689677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemiesToKill: 18
+  enemiesToKill: 26
 --- !u!114 &1501690741
 MonoBehaviour:
   m_ObjectHideFlags: 0
