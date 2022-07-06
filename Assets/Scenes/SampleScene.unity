@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.745283, g: 0.745283, b: 0.745283, a: 1}
+  m_AmbientSkyColor: {r: 0.9433962, g: 0.9433962, b: 0.9433962, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 2
@@ -97,8 +97,10 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 268a3ad061f60fb46bfa5144120da89a,
+    type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 4451070be4d0f9a41b8b75d7dcb37d60,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -507,7 +509,7 @@ Light:
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 12.29
+  m_CookieSize: 10
   m_Shadows:
     m_Type: 0
     m_Resolution: -1
@@ -630,8 +632,9 @@ GameObject:
   m_Component:
   - component: {fileID: 961817409}
   - component: {fileID: 961817410}
+  - component: {fileID: 961817411}
   m_Layer: 0
-  m_Name: EnemySpawner
+  m_Name: Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -669,6 +672,21 @@ MonoBehaviour:
     minCooldown: 2
     maxCooldown: 2
   enemiesPool: {fileID: 11400000, guid: c7b2627e9ae3da241a9941d41ae984dd, type: 2}
+--- !u!114 &961817411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 961817408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac88e64ae9fef9748b4d70b64adf608e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinMesh: {fileID: -5076798556035486163, guid: 2b186690d548a6545b28c662962d3af1,
+    type: 3}
+  coinMaterial: {fileID: 2100000, guid: 77ea128aed8194444a93e197f76c4c69, type: 2}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -719,7 +737,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 300
+  far clip plane: 100
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1259,10 +1277,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3213675559079442954, guid: 70912977a63a18148843c0e7d0502981,
+        type: 3}
+      propertyPath: maxHealth
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6476158410162081749, guid: 70912977a63a18148843c0e7d0502981,
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6476158410162081749, guid: 70912977a63a18148843c0e7d0502981,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6476158410162081750, guid: 70912977a63a18148843c0e7d0502981,
         type: 3}

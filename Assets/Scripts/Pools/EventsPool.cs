@@ -22,5 +22,17 @@ public static class EventsPool
 
     public readonly static UnityEvent GameStartedEvent = new UnityEvent();
 
-
+    public static void ClearAllEvents()
+    {
+        UserSwipedEvent.RemoveAllListeners();
+        CharacterAttackedEvent.RemoveAllListeners();
+        CharacterDamagedEvent.RemoveAllListeners();
+        ComboLevelEvent.RemoveAllListeners();
+        FinishedHitEvent.RemoveAllListeners();
+        GameFinishedEvent.RemoveAllListeners();
+        UpdateSkinEvent.RemoveAllListeners();
+        ClearPoolsEvent.RemoveAllListeners();
+        UpdateUIEvent.RemoveAllListeners();
+        GameStartedEvent.RemoveAllListeners();
+    }
 }

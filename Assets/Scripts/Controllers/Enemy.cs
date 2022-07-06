@@ -83,6 +83,8 @@ public class Enemy : MonoBehaviour
     }
     private void Dispose()
     {
+        if (!gameObject.activeSelf)
+            return;
         if (_disposable == null)
             _disposable = GetComponent<IDisposable>();
         _disposable.Dispose();

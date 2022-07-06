@@ -25,11 +25,18 @@ public class Observer : MonoBehaviour
     {
         get { return _comboCount; }
     }
+    public int EnemiesLeft
+    {
+        get { return _enemiesLeft; }
+    }
 
     private void Awake()
     {
         if (_instance != null && _instance != this)
+        {
             Destroy(this);
+            return;
+        }
         else
         {
             _instance = this;
