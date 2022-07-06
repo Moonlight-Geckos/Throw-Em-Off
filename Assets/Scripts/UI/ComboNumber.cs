@@ -7,8 +7,10 @@ public class ComboNumber : MonoBehaviour
     private TextMeshProUGUI _comboNumText;
     private Observer _observer;
 
-    Vector3 _newScale = Vector3.one * 1.25f;
-    Vector3 _originalScale = Vector3.one * 1.25f;
+    Vector3 _newScale = Vector3.one * 1.5f;
+    Vector3 _originalScale = Vector3.one;
+
+    float _duration;
 
     private void Awake()
     {
@@ -17,25 +19,25 @@ public class ComboNumber : MonoBehaviour
         IEnumerator shake()
         {
             yield return null;
-            float duration = 0.1f;
-            transform.localScale = _originalScale;
-            while (duration > 0)
+            transform.localScale = _originalScale; 
+            _duration = 0.25f;
+            while (_duration > 0)
             {
-                transform.localScale = Vector3.Lerp(transform.localScale, _newScale, duration / Time.deltaTime);
-                duration -= Time.deltaTime;
+                transform.localScale = Vector3.Lerp(transform.localScale, _newScale, _duration / Time.deltaTime);
+                _duration -= Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
-            duration = 0.1f;
-            while (duration > 0)
+            _duration = 0.25f;
+            while (_duration > 0)
             {
-                transform.localScale = Vector3.Lerp(transform.localScale, _originalScale, duration / Time.deltaTime);
-                duration -= Time.deltaTime;
+                transform.localScale = Vector3.Lerp(transform.localScale, _originalScale, _duration / Time.deltaTime);
+                _duration -= Time.deltaTime;
                 yield return new WaitForEndOfFrame();
             }
         }
-        void addcombo(bool deadenem)
+        void addcombo(Enemy deadenem)
         {
-            if (!deadenem)
+            if (deadenem == null)
                 return;
             if(_observer == null) _observer = Observer.Instance;
             _comboNumText.enabled = true;

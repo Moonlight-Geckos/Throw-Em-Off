@@ -13,6 +13,9 @@ public class Character : MonoBehaviour, IDamagable
     [SerializeField]
     private float attackDuration = 0.35f;
 
+    [SerializeField]
+    private ParticlesPool deadParticlesPool;
+
     private Animator _animator;
     private int _animationIndex = 0;
     private bool _animating;
@@ -27,12 +30,14 @@ public class Character : MonoBehaviour, IDamagable
     private List<string> _randomAnimations;
     private Queue<AttackDirection> _nextAttacksQueue;
     private Material _kimonoMaterial;
+    private HealthBar _healthBar;
     private void Awake()
     {
         _attackTimer = TimersPool.Pool.Get();
         _attackTimer.Duration = attackDuration;
         _attackTimer.AddTimerFinishedEventListener(FinishedAnimating);
         _animator = GetComponentInChildren<Animator>();
+        _healthBar = FindObjectOfType<HealthBar>();
         _randomAnimations = new List<string>();
         _nextAttacksQueue = new Queue<AttackDirection>();
         _health = maxHealth;
@@ -118,8 +123,9 @@ public class Character : MonoBehaviour, IDamagable
     }
     private void Die()
     {
+        deadParticlesPool.Pool.Get().transform.position = transform.position;
         EventsPool.GameFinishedEvent.Invoke(false);
-        Destroy(this);
+        gameObject.SetActive(false);
     }
     private void ChangeSkin(SkinItem skin)
     {
@@ -130,7 +136,8 @@ public class Character : MonoBehaviour, IDamagable
         if (_health <= 0)
             return;
         _health -= damage;
-        if(_health <= 0)
+        _healthBar.UpdateValue(_health/maxHealth);
+        if (_health <= 0)
         {
             Die();
         }

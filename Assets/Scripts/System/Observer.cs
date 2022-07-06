@@ -48,10 +48,10 @@ public class Observer : MonoBehaviour
             {
                 _playerIsHitting = true;
             }
-            void nothitting(bool enemydied)
+            void nothitting(Enemy enem)
             {
                 _playerIsHitting = false;
-                if (!enemydied)
+                if (enem == null)
                     return;
 
                 _enemiesLeft--;

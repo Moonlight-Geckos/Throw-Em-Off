@@ -12,6 +12,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private BoxCollider outisdeBoxCollider;
 
+    [SerializeField]
+    private float _pushBackVelocity = 120f;
+
     private bool _landed;
     private bool _killed;
     private IDisposable _disposable;
@@ -21,6 +24,7 @@ public class Enemy : MonoBehaviour
     private CharacterJoint[] _allJoints;
     private Rigidbody _movementRigidbody;
     private Timer _stopPhysicsTimer;
+
 
     private void Awake()
     {
@@ -34,7 +38,10 @@ public class Enemy : MonoBehaviour
         _stopPhysicsTimer.Duration = 8f;
         _stopPhysicsTimer.AddTimerFinishedEventListener(StopPhysics);
 
-        EventsPool.GameFinishedEvent.AddListener((bool t) => Dispose());
+        EventsPool.GameFinishedEvent.AddListener((bool t) => {
+            if (!_killed)
+                Dispose();
+        });
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -93,7 +100,7 @@ public class Enemy : MonoBehaviour
     {
         _killed = true;
         _animator.enabled = false;
-        EventsPool.FinishedHitEvent.Invoke(true);
+        EventsPool.FinishedHitEvent.Invoke(this);
         foreach (var collider in _allBodyColliders)
         {
             collider.enabled = true;
@@ -104,8 +111,8 @@ public class Enemy : MonoBehaviour
             rb.isKinematic = false;
             rb.useGravity = true;
         }
-        _movementRigidbody.velocity = Vector3.up * 140f;
-        bodyRigidbody.velocity = (-transform.forward * 140f) + Vector3.up * 65f;
+        _movementRigidbody.velocity = Vector3.up * _pushBackVelocity;
+        bodyRigidbody.velocity = (-transform.forward * _pushBackVelocity) + Vector3.up * _pushBackVelocity/2f;
         bodyRigidbody.angularVelocity = Vector3.right * Random.Range(-2f, 2f);
         outisdeBoxCollider.enabled = false;
         _stopPhysicsTimer.Run();

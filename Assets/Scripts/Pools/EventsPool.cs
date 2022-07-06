@@ -10,11 +10,13 @@ public static class EventsPool
 
     public readonly static UnityEvent<int> ComboLevelEvent = new UnityEvent<int>();
 
-    public readonly static UnityEvent<bool> FinishedHitEvent = new UnityEvent<bool>();
+    public readonly static UnityEvent<Enemy> FinishedHitEvent = new UnityEvent<Enemy>();
 
     public readonly static UnityEvent<bool> GameFinishedEvent = new UnityEvent<bool>();
     
     public readonly static UnityEvent<SkinItem> UpdateSkinEvent = new UnityEvent<SkinItem>();
+
+    public readonly static UnityEvent CoinCollectedEvent = new UnityEvent();
 
     public readonly static UnityEvent ClearPoolsEvent = new UnityEvent();
 

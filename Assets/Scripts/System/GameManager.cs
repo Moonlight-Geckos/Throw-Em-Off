@@ -46,16 +46,24 @@ public class GameManager : MonoBehaviour
             EventsPool.ClearPoolsEvent.Invoke();
             EventsPool.GameFinishedEvent.AddListener(FinishGame);
             EventsPool.GameStartedEvent.AddListener(StartGame);
+            EventsPool.CoinCollectedEvent.AddListener(CollectCoin);
         }
     }
     private void Start()
     {
+        Application.targetFrameRate = 60;
         EventsPool.UpdateSkinEvent.Invoke(DataHolder.Instance.AllSkins[PlayerStorage.SkinSelected]);
     }
     void Update()
     {
         TimersPool.UpdateTimers(Time.deltaTime);
         _timeSinceStarted += Time.deltaTime;
+    }
+    private void CollectCoin()
+    {
+        _collectedGems++;
+        PlayerStorage.CoinsCollected += 1;
+        EventsPool.UpdateUIEvent.Invoke();
     }
     private void StartGame()
     {

@@ -27,7 +27,6 @@ public class HeadUI : MonoBehaviour
     #endregion
 
     private GameObject currentActivePanel;
-    private Animator handAnimator;
 
     private void Awake()
     {
