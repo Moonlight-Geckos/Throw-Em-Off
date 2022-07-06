@@ -33,7 +33,6 @@ public static class EventsPool
         FinishedHitEvent.RemoveAllListeners();
         GameFinishedEvent.RemoveAllListeners();
         UpdateSkinEvent.RemoveAllListeners();
-        ClearPoolsEvent.RemoveAllListeners();
         UpdateUIEvent.RemoveAllListeners();
         GameStartedEvent.RemoveAllListeners();
     }

@@ -1562,6 +1562,7 @@ MonoBehaviour:
     type: 2}
   bodyRigidbody: {fileID: 4281910237100492447}
   outisdeBoxCollider: {fileID: 332061243260740648}
+  _pushBackVelocity: 120
 --- !u!95 &8835099408715826929
 Animator:
   serializedVersion: 4

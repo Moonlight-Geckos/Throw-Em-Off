@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     }
     private void StartGame()
     {
-
+        EventsPool.ClearPoolsEvent.Invoke();
     }
     private void FinishGame(bool d)
     {
