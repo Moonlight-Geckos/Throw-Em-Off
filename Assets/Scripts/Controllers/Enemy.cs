@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
     private BoxCollider outisdeBoxCollider;
 
     [SerializeField]
-    private float _pushBackVelocity = 120f;
+    private float _pushBackVelocity = 85f;
 
     private bool _landed;
     private bool _killed;
@@ -111,8 +111,8 @@ public class Enemy : MonoBehaviour
             rb.isKinematic = false;
             rb.useGravity = true;
         }
-        _movementRigidbody.velocity = Vector3.up * _pushBackVelocity;
-        bodyRigidbody.velocity = (-transform.forward * _pushBackVelocity) + Vector3.up * _pushBackVelocity/2f;
+        _movementRigidbody.velocity = Vector3.up * (_pushBackVelocity + Observer.Instance.ComboCount*1.7f);
+        bodyRigidbody.velocity = (-transform.forward * _pushBackVelocity) + Vector3.up *(_pushBackVelocity + Observer.Instance.ComboCount * 1.3f) / 2f;
         bodyRigidbody.angularVelocity = Vector3.right * Random.Range(-2f, 2f);
         outisdeBoxCollider.enabled = false;
         _stopPhysicsTimer.Run();
