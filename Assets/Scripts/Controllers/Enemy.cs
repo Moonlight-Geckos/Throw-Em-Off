@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
 
         _stopPhysicsTimer = TimersPool.Pool.Get();
         _stopPhysicsTimer.Duration = 8f;
-        _stopPhysicsTimer.AddTimerFinishedEventListener(StopPhysics);
+        _stopPhysicsTimer.AddTimerFinishedEventListener(Dispose);
 
         EventsPool.GameFinishedEvent.AddListener((bool t) => {
             if (!_killed)
@@ -56,18 +56,6 @@ public class Enemy : MonoBehaviour
         if (other.gameObject.layer == StaticValues.DestinationLayer) Explode();
         else if (Observer.PlayerIsHitting && other.gameObject.layer == StaticValues.CharacterLayer) Kill();
     }
-    private void StopPhysics()
-    {
-        foreach (var jo in _allJoints)
-        {
-            Destroy(jo);
-        }
-        foreach (var rb in _allBodyRigidbodies)
-        {
-            Destroy(rb);
-        }
-        TimersPool.Pool.Release(_stopPhysicsTimer);
-    }
     private void Land()
     {
         _landed = true;
@@ -80,7 +68,8 @@ public class Enemy : MonoBehaviour
             transform.LookAt(new Vector3(0, transform.position.y, 0));
             _movementRigidbody.velocity = transform.forward * Random.Range(22f, 25f);
         }
-        StartCoroutine(land());
+        if(gameObject.activeSelf)
+            StartCoroutine(land());
     }
     private void Explode()
     {
